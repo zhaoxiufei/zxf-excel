@@ -70,8 +70,8 @@ List<User> objects = new ExcelImport("E:\\测试导出.xlsx",1).getData(User.cla
  
 ### 微信
 
-![咖啡](https://github.com/zhaoxiufei/zxf-excel/blob/master/doc/wx.png)
+![咖啡](https://github.com/zhaoxiufei/zxf-excel/blob/master/images/wx.png)
  
 ### 支付宝
 
-![咖啡](https://github.com/zhaoxiufei/zxf-excel/blob/master/doc/alipay.png)
+![咖啡](https://github.com/zhaoxiufei/zxf-excel/blob/master/images/alipay.png)
