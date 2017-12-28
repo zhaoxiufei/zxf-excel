@@ -24,9 +24,10 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/zhaoxiufei/zxf-excel</url>
-        <connection>https://github.com/zhaoxiufei/zxf-excel.git</connection>
-        <developerConnection>https://github.com/zhaoxiufei</developerConnection>
+        <tag>master</tag>
+        <url>https://github.com/zhaoxiufei/zxf-excel.git</url>
+        <connection>scm:git:https://github.com/zhaoxiufei/zxf-excel.git</connection>
+        <developerConnection>scm:git:https://github.com/zhaoxiufei/zxf-excel.git</developerConnection>
     </scm>
     <developers>
         <developer>
@@ -99,9 +100,23 @@
                 <version>3.0.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -118,12 +133,12 @@
     </build>
     <distributionManagement>
         <snapshotRepository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 </project>
