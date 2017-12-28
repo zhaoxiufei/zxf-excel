@@ -47,19 +47,19 @@ public class User {
 
 ### 2.3 导入示例
 
-```
+```bash
 //导入示例：ExcelTest
-
-new ExcelExport(User.class).setData(objects).write("E:\\", "测试导出.xlsx");
+List<User> objects = new ExcelImport("E:\\测试导出.xlsx",1).getData(User.class);
 ```
 
 ### 2.4 导出示例
 
-```
+```bash
 //导出示例：ExcelTest
-
-List<User> objects = new ExcelImport("E:\\测试导出.xlsx",1).getData(User.class);
+new ExcelExport(User.class).setData(objects).write("E:\\", "测试导出.xlsx");
 ```
+![导出Demo](https://github.com/zhaoxiufei/zxf-excel/blob/master/images/test.png)
+ 
 ## 三、技术支持
  1. 使用中遇到问题,请新建[Issue](https://github.com/zhaoxiufei/zxf-excel/issues/)
  2. 如需及时帮助,请[加入QQ群](https://shang.qq.com/wpa/qunwpa?idkey=487f8cff0d1f4bce4e44c6a7626dc807cc9a1508889469778678fcd999ebf6d2)
