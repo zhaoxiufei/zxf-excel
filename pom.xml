@@ -141,5 +141,4 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
-    <!--mvn clean deploy -P sonatype-oss-release -Darguments="gpg.passphrase=121511Fei"-->
 </project>
