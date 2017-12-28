@@ -54,6 +54,10 @@ public class ExcelExport {
      * 注解列表
      */
     private List<ExcelModel> excelModels = new ArrayList<>();
+    /**
+     * 样式缓存
+     */
+    private Map<Field, CellStyle> cacheStyles = new HashMap<>();
 
     /**
      * 构造函数
@@ -98,7 +102,9 @@ public class ExcelExport {
             Cell titleCell = titleRow.createCell(0);
             titleCell.setCellStyle(styles.get(TITLE));
             titleCell.setCellValue(excelSheet.title());
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, excelModels.size() - 1));
+            if (excelModels.size() > 1) {
+                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, excelModels.size() - 1));
+            }
         }
         //构建表头
         Row headerRow = addRow();
@@ -177,7 +183,11 @@ public class ExcelExport {
     private Cell addCell(Row row, int column, Object val, ExcelModel excelModel) {
         Cell cell = row.createCell(column);
         ExcelField excelField = excelModel.getExcelField();
-        CellStyle style = createStyle(excelField.align());
+        CellStyle style = cacheStyles.get(excelModel.getField());
+        if (style == null) {
+            style = createStyle(excelField.align());
+            cacheStyles.put(excelModel.getField(), style);
+        }
         cell.setCellStyle(style);
         if (val == null) {
             cell.setCellValue("");
