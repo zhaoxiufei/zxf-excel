@@ -45,4 +45,18 @@ public class ExcelTest {
         }
     }
 
+    @Test
+    public void exportTes2() {
+        List<User2> objects = new ArrayList<>();
+        for (int i = 1; i < 1000000; i++) {
+            User2 user = new User2();
+            user.setId((long) i);
+            objects.add(user);
+        }
+        try {
+            new ExcelExport(User2.class).setData(objects).write("E:\\");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -295,32 +295,4 @@ public class ExcelImport {
         }
         return dataList;
     }
-
-//	/**
-//	 * 导入测试
-//	 */
-//	public static void main(String[] args) throws Throwable {
-//		
-//		ExcelImport ei = new ExcelImport("target/export.xlsx", 1);
-//		
-//		for (int i = ei.getDataRowNum(); i < ei.getLastDataRowNum(); i++) {
-//			Row row = ei.getRow(i);
-//			for (int j = 0; j < ei.getLastCellNum(); j++) {
-//				Object val = ei.getCellValue(row, j);
-//				System.out.print(val+", ");
-//			}
-//			System.out.print("\n");
-//		}
-//		
-//	}
-
-//    public static void main(String[] args) throws IOException {
-//        ExcelImport excel = new ExcelImport("C:\\Users\\magic\\Desktop\\支付明细eeeee.xls");
-//        List<User> list = excel.getDataList(User.class);
-//        for (User userExcel : list) {
-//            System.out.println(userExcel.getUserName());
-//            System.out.println(userExcel.getCreatedTime());
-//        }
-//    }
-
 }
