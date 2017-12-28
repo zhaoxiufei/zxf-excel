@@ -178,7 +178,7 @@ public class ExcelExport {
      * @param row    添加的行
      * @param column 添加列号
      * @param val    添加值
-     * @return 单元格对象
+     * @return Cell 单元格对象
      */
     private Cell addCell(Row row, int column, Object val, ExcelModel excelModel) {
         Cell cell = row.createCell(column);
@@ -217,7 +217,7 @@ public class ExcelExport {
      * 样式
      *
      * @param align 对齐方式（1：靠左；2：居中；3：靠右）
-     * @return CellStyle
+     * @return CellStyle CellStyle
      */
     private CellStyle createStyle(HorizontalAlignment align) {
         CellStyle style = wb.createCellStyle();
@@ -242,7 +242,8 @@ public class ExcelExport {
     /**
      * 添加数据
      *
-     * @return data 数据列表
+     * @param data 数据
+     * @return ExcelExport ExcelExport
      */
     public ExcelExport setData(List<?> data) {
         for (Object o : data) {
@@ -261,6 +262,7 @@ public class ExcelExport {
      * 输出数据流
      *
      * @param os 输出数据流
+     * @throws IOException IOException
      */
     private void write(OutputStream os) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -294,6 +296,9 @@ public class ExcelExport {
 
     /**
      * 输出到客户端,文件名为:ExcelSheet.title()
+     *
+     * @param response HttpServletResponse
+     * @throws IOException IOException
      */
     public void write(HttpServletResponse response) throws IOException {
         write(response, null);
@@ -303,6 +308,8 @@ public class ExcelExport {
      * 输出到客户端
      *
      * @param fileName 输出文件名
+     * @param response HttpServletResponse
+     * @throws IOException IOException
      */
     public void write(HttpServletResponse response, String fileName) throws IOException {
         response.reset();
@@ -316,6 +323,7 @@ public class ExcelExport {
      * 输出到文件中,文件名为:ExcelSheet.title()
      *
      * @param path 输出路径
+     * @throws IOException IOException
      */
     public void write(String path) throws IOException {
         String fileName = (path.endsWith("/") ? path + excelSheet.title() : path + "/" + excelSheet.title()) + FILE_SUFFIX;
@@ -326,7 +334,9 @@ public class ExcelExport {
     /**
      * 输出到文件,
      *
+     * @param path     输出路径
      * @param fileName 输出文件名
+     * @throws IOException IOException
      */
     public void write(String path, String fileName) throws IOException {
         FileOutputStream os = new FileOutputStream(path + (fileName.contains(".") ? fileName : fileName + FILE_SUFFIX));

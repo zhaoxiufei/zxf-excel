@@ -14,8 +14,12 @@ import java.lang.annotation.Target;
 public @interface ExcelSheet {
     /**
      * 表格标题
+     * @return String
      */
     String title();
-
+    /**
+     * 工作簿名称
+     * @return String
+     */
     String sheet() default "sheet";
 }

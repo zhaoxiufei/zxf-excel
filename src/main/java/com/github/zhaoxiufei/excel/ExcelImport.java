@@ -1,10 +1,10 @@
 
 package com.github.zhaoxiufei.excel;
 
+import com.github.zhaoxiufei.excel.annotation.ExcelField;
 import com.github.zhaoxiufei.excel.enums.FieldType;
 import com.github.zhaoxiufei.excel.utils.Reflections;
 import com.github.zhaoxiufei.excel.utils.StringUtil;
-import com.github.zhaoxiufei.excel.annotation.ExcelField;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.FileMagic;
 import org.apache.poi.ss.usermodel.*;
@@ -27,20 +27,21 @@ public class ExcelImport {
     private static Logger log = LoggerFactory.getLogger(ExcelImport.class);
 
     /**
-     * 工作表对象
+     * 工作簿对象
      */
     private Sheet sheet;
 
     /**
-     * 标题行号
+     * 表头行号
      */
     private int headerNum;
 
 
     /**
-     * 构造函数
+     * 构造函数,默认读取第一个工作工作簿对象,第一行表头
      *
-     * @param fileName 导入文件，读取第一个工作表,第一行
+     * @param fileName 导入文件
+     * @throws IOException IOException
      */
     public ExcelImport(String fileName) throws IOException {
         this(fileName, 0);
@@ -50,7 +51,8 @@ public class ExcelImport {
      * 构造函数
      *
      * @param fileName  导入文件
-     * @param headerNum 标题行号
+     * @param headerNum  表头所在行号
+     * @throws IOException IOException
      */
     public ExcelImport(String fileName, int headerNum) throws IOException {
         this(fileName, headerNum, 0);
@@ -60,8 +62,9 @@ public class ExcelImport {
      * 构造函数
      *
      * @param fileName   导入文件
-     * @param headerNum  标题行号
-     * @param sheetIndex 工作表编号
+     * @param headerNum  表头所在行号
+     * @param sheetIndex 工作簿索引
+     * @throws IOException IOException
      */
     public ExcelImport(String fileName, int headerNum, int sheetIndex) throws IOException {
         this(new File(fileName), headerNum, sheetIndex);
@@ -70,7 +73,8 @@ public class ExcelImport {
     /**
      * 构造函数
      *
-     * @param file 导入文件对象，读取第一个工作表,第一行
+     * @param file 导入文件对象
+     * @throws IOException IOException
      */
     public ExcelImport(File file) throws IOException {
         this(file, 0);
@@ -80,7 +84,8 @@ public class ExcelImport {
      * 构造函数
      *
      * @param file      导入文件对象
-     * @param headerNum 标题行号
+     * @param headerNum 表头所在行号
+     * @throws IOException IOException
      */
     public ExcelImport(File file, int headerNum) throws IOException {
         this(file, headerNum, 0);
@@ -90,8 +95,9 @@ public class ExcelImport {
      * 构造函数
      *
      * @param file       导入文件对象
-     * @param headerNum  标题行号
-     * @param sheetIndex 工作表编号
+     * @param headerNum  表头所在行号
+     * @param sheetIndex 工作簿索引
+     * @throws IOException IOException
      */
     public ExcelImport(File file, int headerNum, int sheetIndex) throws IOException {
         this(new BufferedInputStream(new FileInputStream(file)), headerNum, sheetIndex);
@@ -101,6 +107,7 @@ public class ExcelImport {
      * 构造函数
      *
      * @param buf 导入文件对象
+     * @throws IOException IOException
      */
     public ExcelImport(byte[] buf) throws IOException {
         this(buf, 0);
@@ -109,7 +116,9 @@ public class ExcelImport {
     /**
      * 构造函数
      *
-     * @param buf 导入文件对象
+     * @param buf       导入文件对象
+     * @param headerNum 表头所在行号
+     * @throws IOException IOException
      */
     public ExcelImport(byte[] buf, int headerNum) throws IOException {
         this(buf, headerNum, 0);
@@ -118,7 +127,10 @@ public class ExcelImport {
     /**
      * 构造函数
      *
-     * @param buf 导入文件对象
+     * @param buf        导入文件对象
+     * @param headerNum  表头所在行号
+     * @param sheetIndex 工作簿索引
+     * @throws IOException IOException
      */
     public ExcelImport(byte[] buf, int headerNum, int sheetIndex) throws IOException {
         this(new ByteArrayInputStream(buf), headerNum, sheetIndex);
@@ -128,6 +140,7 @@ public class ExcelImport {
      * 构造函数
      *
      * @param inputStream 导入文件对象
+     * @throws IOException IOException
      */
     public ExcelImport(InputStream inputStream) throws IOException {
         this(inputStream, 0);
@@ -137,6 +150,8 @@ public class ExcelImport {
      * 构造函数
      *
      * @param inputStream 导入文件对象
+     * @param headerNum   表头所在行号
+     * @throws IOException IOException
      */
     public ExcelImport(InputStream inputStream, int headerNum) throws IOException {
         this(inputStream, headerNum, 0);
@@ -145,21 +160,23 @@ public class ExcelImport {
     /**
      * 构造函数
      *
-     * @param headerNum  标题行号，数据行号=标题行号+1
-     * @param sheetIndex 工作表编号
+     * @param inputStream 导入文件对象
+     * @param headerNum   表头所在行号
+     * @param sheetIndex  工作簿索引
+     * @throws IOException IOException
      */
-    public ExcelImport(InputStream is, int headerNum, int sheetIndex) throws IOException {
-        if (!is.markSupported()) {
-            is = new PushbackInputStream(is, 8);
+    public ExcelImport(InputStream inputStream, int headerNum, int sheetIndex) throws IOException {
+        if (!inputStream.markSupported()) {
+            inputStream = new PushbackInputStream(inputStream, 8);
         }
         /*
       工作薄对象
      */
         Workbook wb;
-        if (FileMagic.OLE2 == FileMagic.valueOf(is)) {
-            wb = new HSSFWorkbook(is);
-        } else if (FileMagic.OOXML == FileMagic.valueOf(is)) {
-            wb = new XSSFWorkbook(is);
+        if (FileMagic.OLE2 == FileMagic.valueOf(inputStream)) {
+            wb = new HSSFWorkbook(inputStream);
+        } else if (FileMagic.OOXML == FileMagic.valueOf(inputStream)) {
+            wb = new XSSFWorkbook(inputStream);
         } else {
             throw new RuntimeException("文档格式不正确!");
         }
@@ -193,21 +210,14 @@ public class ExcelImport {
     }
 
     /**
-     * 获取最后一个列号
-     */
-    public int getLastCellNum() {
-        return this.getRow(headerNum).getLastCellNum();
-    }
-
-    /**
      * 获取单元格值
      *
      * @param row    获取的行
      * @param column 获取单元格列号
-     * @return 单元格值
+     * @return Object 单元格值
      */
     @SuppressWarnings("deprecation")
-    public Object getCellValue(Row row, int column) {
+    private Object getCellValue(Row row, int column) {
         Object val = "";
         try {
             Cell cell = row.getCell(column);
@@ -234,6 +244,8 @@ public class ExcelImport {
      * 获取导入数据列表
      *
      * @param cls 导入对象类型
+     * @param <E> 真实类型
+     * @return List
      */
     public <E> List<E> getData(Class<E> cls) {
         List<ExcelModel> excelModels = new ArrayList<>();

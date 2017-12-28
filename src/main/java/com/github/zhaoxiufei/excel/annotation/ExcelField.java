@@ -19,31 +19,43 @@ public @interface ExcelField {
 
     /**
      * 导出字段标题
+     *
+     * @return String
      */
     String name();
 
     /**
      * 导出字段字段排序（升序）
+     *
+     * @return int
      */
     int sort() default 0;
 
     /**
      * 列宽
+     *
+     * @return int
      */
     int width() default 9;
 
     /**
      * 格式化
+     *
+     * @return String
      */
     String format() default "";
 
     /**
      * 字段类型（0：导出导入；1：仅导出；2：仅导入）
+     *
+     * @return FieldType
      */
     FieldType type() default FieldType.ALL;
 
     /**
      * 导出字段对齐方式,默认:水平居中
+     *
+     * @return HorizontalAlignment
      */
     HorizontalAlignment align() default HorizontalAlignment.CENTER;
 }
